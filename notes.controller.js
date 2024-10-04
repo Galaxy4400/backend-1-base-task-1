@@ -44,8 +44,6 @@ const removeNote = async (id) => {
 
 	const removingNote = notes.find(note => +note.id === id);
 
-	console.log(removingNote);
-
 	if (!removingNote) {
 		console.log(chalk.red(`Note id: ${id} not finded`));
 
@@ -60,6 +58,25 @@ const removeNote = async (id) => {
 };
 
 
+const editNote = async (id, title) => {
+	const notes = await getNotes();
+
+	const updatingNote = notes.find(note => +note.id === id);
+
+	if (!updatingNote) {
+		console.log(chalk.red(`Note id: ${id} not finded`));
+
+		return;
+	}
+
+	const newNotes = notes.map(note => +note.id === id ? { ...note, title } : note);
+
+	await fs.writeFile(notesPath, JSON.stringify(newNotes));
+
+	console.log(chalk.green(`Note id: ${id} updated`));
+};
+
+
 module.exports = {
-	addNote, printNotes, removeNote
+	addNote, printNotes, removeNote, editNote
 }
